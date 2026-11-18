@@ -17,12 +17,14 @@ public class CircuitManager : MonoBehaviour
     [SerializeField] private int columns = 3;
     [SerializeField] private int rows = 3;
     [SerializeField] private float spacing = 1.5f; // De afstand tussen de 3D objecten in meters
-
+    [Header("Grid Visuals")]
+    [SerializeField] private GameObject gridSlotPrefab; // Een visueel rondje/vakje dat de snap-plek op het grid aangeeft
     [Header("UI Feedback")]
     [SerializeField] private WorldScreen puzzleScreen;
     private void Start()
     {
-       Initializepuzzel();
+        GenerateGrid();
+        Initializepuzzel();
     }
     public void Initializepuzzel() 
     {
@@ -40,6 +42,7 @@ public class CircuitManager : MonoBehaviour
             ring.OnRingRotated += HandleRingRotated;
         }
     }
+    [ContextMenu("Generate Grid Now")]
     public void GenerateGrid()
     {
         Debug.Log("GenerateGrid gestart!");
@@ -52,14 +55,22 @@ public class CircuitManager : MonoBehaviour
 
         if (ringPrefab == null || startPointPrefab == null || endPointPrefab == null)
         {
-            Debug.LogError("FOUT: Eén of meer prefabs (Start, Eind, Ring) ontbreken in de Inspector!");
+            Debug.LogError("FOUT: Eén of meer prefabs (Start, Eind, Ring) ontbreken of zijn geen echte prefabs in de Project-map!");
             return;
         }
 
-        // 1. Maak het grid eerst leeg
-        foreach (Transform child in gridParent)
+        // 1. Maak het grid eerst leeg (veilig voor zowel Play-mode als Edit-mode)
+        for (int i = gridParent.childCount - 1; i >= 0; i--)
         {
-            Destroy(child.gameObject);
+            Transform child = gridParent.GetChild(i);
+            if (Application.isPlaying)
+            {
+                Destroy(child.gameObject);
+            }
+            else
+            {
+                DestroyImmediate(child.gameObject);
+            }
         }
         allRings.Clear();
 
@@ -68,7 +79,7 @@ public class CircuitManager : MonoBehaviour
 
         if (totalCells < 2)
         {
-            Debug.LogError("Grid is te klein! Zorg voor minimaal 2 vakjes.");
+            Debug.LogError("Grid is te klein! Zorg voor minimaal 2 vakjes (bijv. 2x1 of 3x3).");
             return;
         }
 
@@ -81,7 +92,6 @@ public class CircuitManager : MonoBehaviour
         }
 
         Debug.Log($"Startpunt index: {startIndex}, Eindpunt index: {endIndex}");
-
         // 3. Bouw het 3D grid op
         for (int i = 0; i < totalCells; i++)
         {
@@ -89,6 +99,18 @@ public class CircuitManager : MonoBehaviour
             int y = i / columns;
 
             Vector3 spawnPosition = new Vector3(x * spacing, -y * spacing, 0f);
+
+            // A. Spawn altijd eerst een visueel Snap Point / Grid Cel op deze plek
+            if (gridSlotPrefab != null)
+            {
+                GameObject slotObj = Instantiate(gridSlotPrefab, gridParent);
+                slotObj.name = $"GridSlot_{x}_{y}";
+                slotObj.transform.localPosition = spawnPosition;
+                slotObj.transform.localRotation = Quaternion.identity;
+                slotObj.transform.localScale = Vector3.one;
+            }
+
+            // B. Spawn daarna de Ring, Start of Eindpunt op exact dezelfde positie
             GameObject spawnedObj = null;
 
             if (i == startIndex)
@@ -104,28 +126,24 @@ public class CircuitManager : MonoBehaviour
             else
             {
                 spawnedObj = Instantiate(ringPrefab, gridParent);
-                spawnedObj.name = $"Ring_3D_{i}";
+                spawnedObj.name = $"Ring_3D_{i}"; // GOED
 
                 RotatableRing newRing = spawnedObj.GetComponent<RotatableRing>();
                 if (newRing != null)
                 {
                     allRings.Add(newRing);
                 }
-                else
-                {
-                    Debug.LogWarning($"Waarschuwing: Gespawnde ring ({spawnedObj.name}) heeft geen RotatableRing component!");
-                }
             }
 
             if (spawnedObj != null)
             {
-                spawnedObj.transform.localPosition = spawnPosition;
+                // Zet ze ietsjes vóór de grid slots (bijv. -0.05 op Z) zodat ze er mooi bovenop liggen
+                spawnedObj.transform.localPosition = new Vector3(spawnPosition.x, spawnPosition.y, -0.05f);
                 spawnedObj.transform.localRotation = Quaternion.identity;
-                spawnedObj.transform.localScale = Vector3.one; // Zorg dat de schaal niet 0 is
+                spawnedObj.transform.localScale = Vector3.one;
             }
         }
 
-        Debug.Log($"Grid generatie voltooid! Aantal geldige ringen in lijst: {allRings.Count}");
     }
     private void HandleRingRotated()
     {

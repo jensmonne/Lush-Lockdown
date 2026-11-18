@@ -11,6 +11,8 @@ public class RotatableRing : MonoBehaviour
     [SerializeField] private bool isBeingHeld;
     public bool IsCorrectAligned { get; set; } = false;
     public event Action OnRingRotated;
+    [Header("Winnende Instelling")]
+    [SerializeField] private float targetCorrectAngle = 90f; // De hoek waarop de ring goed staat
     public void OnGrabStart() 
     {
         isBeingHeld = true;
@@ -23,10 +25,34 @@ public class RotatableRing : MonoBehaviour
 
         SnapToNearest90();
     }
-    public void RotateRing(float deltaAngel) 
+    public void RotateRing(float deltaAngel)
     {
-
+        
     }
+
+    public void SnapAndCheck()
+    {
+        // 1. Lees de huidige rotatie uit (neem de Z-as van de transform)
+        CurrentAngle = transform.localEulerAngles.z;
+
+        // 2. Bereken de dichtstbijzijnde 90 graden stap
+        TargetSnapAngel = Mathf.Round(CurrentAngle / 90f) * 90f;
+        CurrentAngle = TargetSnapAngel;
+
+        // 3. Pas de definitieve rotatie strak toe op het object
+        transform.localRotation = Quaternion.Euler(0f, 0f, CurrentAngle);
+
+        // 4. Controleer of de hoek overeenkomt met de winnende hoek
+        float normalizedAngle = (CurrentAngle % 360f + 360f) % 360f;
+        float normalizedTarget = (targetCorrectAngle % 360f + 360f) % 360f;
+        IsCorrectAligned = Mathf.Approximately(normalizedAngle, normalizedTarget);
+
+        // 5. Geef een seintje aan de CircuitManager
+        OnRingRotated?.Invoke();
+
+        Debug.Log($"Ring gespind naar {CurrentAngle}° | Correct uitgelijnd: {IsCorrectAligned}");
+    }
+
     public void SnapToNearest90() 
     {
 
