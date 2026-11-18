@@ -15,7 +15,9 @@ public class CodeCrackerScript : MonoBehaviour
     public int GenerateRandomCode()
     {
         Code = UnityEngine.Random.Range(0, 10000);
+        Debug.Log(Code.ToString("D4"));
         return Code;
+
     }
 
     public void CodeCracked(bool CheckForCode)
