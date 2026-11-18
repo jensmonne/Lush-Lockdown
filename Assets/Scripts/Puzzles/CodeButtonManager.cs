@@ -5,7 +5,7 @@ public class CodeButtonManager : MonoBehaviour
 {
     [Header("Code Settings")]
     [SerializeField] private CodeCrackerScript codeCrackerScript;
-    private string currentInput = "";
+    public string currentInput = "";
 
     [Header("Events")]
 

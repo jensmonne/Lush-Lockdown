@@ -8,7 +8,6 @@ public class CodeCrackerScript : MonoBehaviour
 
     private void Awake()
     {
-        codeCanvas.SetActive(false);
         GenerateRandomCode();
     }
 
@@ -22,6 +21,6 @@ public class CodeCrackerScript : MonoBehaviour
 
     public void CodeCracked(bool CheckForCode)
     {
-        codeCanvas.SetActive(true);
+
     }
 }
