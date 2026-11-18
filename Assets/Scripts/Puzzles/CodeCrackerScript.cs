@@ -14,11 +14,11 @@ public class CodeCrackerScript : MonoBehaviour
 
     public int GenerateRandomCode()
     {
-        Code = UnityEngine.Random.Range(0, 9999);
+        Code = UnityEngine.Random.Range(0, 10000);
         return Code;
     }
 
-    public void CodeCracked()
+    public void CodeCracked(bool CheckForCode)
     {
         codeCanvas.SetActive(true);
     }
