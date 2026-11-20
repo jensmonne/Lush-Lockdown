@@ -1,3 +1,4 @@
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,14 +19,9 @@ public class CodeButtonManager : MonoBehaviour
 
         currentInput += digit;
         Debug.Log("Current Input: " + currentInput);
-        
-        if (currentInput.Length == 4)
-        {
-            CheckCode();
-        }
     }
 
-    private void CheckCode()
+    public void EnterInput()
     {
         if (currentInput == codeCrackerScript.Code.ToString("D4")) 
         {
@@ -43,5 +39,14 @@ public class CodeButtonManager : MonoBehaviour
     public void ResetInput()
     {
         currentInput = "";
+    }
+
+    public void BackspaceInput()
+    {
+        if (currentInput.Length >= 1)
+        {
+            currentInput = currentInput.Substring(0, currentInput.Length - 1);
+            Debug.Log("Current Input: " + currentInput);
+        }
     }
 }
