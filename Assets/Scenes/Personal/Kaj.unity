@@ -343,8 +343,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb79237ebf69874982f40e848181f49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonitorAudio
-  correctSFX: {fileID: 8300000, guid: c3e4ee38983946c4eb73911c4c56a33a, type: 3}
-  wrongSFX: {fileID: 8300000, guid: c7178317b0e581c49b5e6793f8de8521, type: 3}
+  correctSFX: {fileID: 8300000, guid: 33792159a7880454d8b9a8b845d22be3, type: 3}
+  wrongSFX: {fileID: 8300000, guid: 8f81e2b28818efe43853c63a73b46e88, type: 3}
+  pressSFX: {fileID: 8300000, guid: 2e810e5ca570f894c843072c18069d85, type: 3}
   audioSource: {fileID: 76806863}
 --- !u!1 &145743623
 GameObject:
@@ -840,6 +841,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -1052,16 +1065,28 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1686089393}
-        m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
-        m_MethodName: PressNumber
-        m_Mode: 5
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 9
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1686089393}
+        m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
+        m_MethodName: BackspaceInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &478923663
@@ -1368,6 +1393,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -1775,6 +1812,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -1908,6 +1957,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -2719,6 +2780,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -2971,6 +3044,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -3241,6 +3326,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -3657,7 +3754,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 9
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1584914840
@@ -4298,6 +4395,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -4568,6 +4677,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
@@ -5018,6 +5139,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: PressSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1686089393}
         m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
         m_MethodName: PressNumber
