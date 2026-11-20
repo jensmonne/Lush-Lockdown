@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class MonitorAudio : MonoBehaviour
 {
+    [SerializeField] private CodeButtonManager codeButtonManager;
     [SerializeField] private AudioClip correctSFX;
     [SerializeField] private AudioClip wrongSFX;
     [SerializeField] private AudioClip pressSFX;
@@ -20,6 +21,7 @@ public class MonitorAudio : MonoBehaviour
 
     public void PressSound()
     {
+        if (codeButtonManager.currentInput.Length >= 4) return;
         audioSource.PlayOneShot(pressSFX);
     }
 }

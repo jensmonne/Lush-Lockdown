@@ -246,7 +246,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -343,6 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb79237ebf69874982f40e848181f49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonitorAudio
+  codeButtonManager: {fileID: 1686089393}
   correctSFX: {fileID: 8300000, guid: 33792159a7880454d8b9a8b845d22be3, type: 3}
   wrongSFX: {fileID: 8300000, guid: 8f81e2b28818efe43853c63a73b46e88, type: 3}
   pressSFX: {fileID: 8300000, guid: 2e810e5ca570f894c843072c18069d85, type: 3}
