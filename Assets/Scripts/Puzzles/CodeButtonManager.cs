@@ -12,8 +12,8 @@ public class CodeButtonManager : MonoBehaviour
     public string currentInput = "";
 
     [Header("Events")]
-    public UnityEvent onCodeCorrect;
-    public UnityEvent onCodeWrong;
+    public UnityEvent OnCodeCorrect;
+    public UnityEvent OnCodeWrong;
 
     public void PressNumber(string digit)
     {
@@ -29,7 +29,7 @@ public class CodeButtonManager : MonoBehaviour
             if (currentInput == codeCrackerScript.Code.ToString("D4"))
             {
                 Debug.Log("Access Granted!");
-                onCodeCorrect.Invoke();
+                OnCodeCorrect.Invoke();
                 Button[] btns = gameObject.GetComponentsInChildren<Button>();
                 foreach (Button btn in btns)
                     btn.enabled = false;
@@ -37,7 +37,7 @@ public class CodeButtonManager : MonoBehaviour
             else
             {
                 Debug.Log("Wrong Code! Resetting...");
-                onCodeWrong.Invoke();
+                OnCodeWrong.Invoke();
                 ResetInput();
             }
         }
