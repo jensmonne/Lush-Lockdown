@@ -13,6 +13,17 @@ public class RotatableRing : MonoBehaviour
     public event Action OnRingRotated;
     [Header("Winnende Instelling")]
     [SerializeField] private float targetCorrectAngle = 90f; // De hoek waarop de ring goed staat
+    [Header("Grid Snap Point")]
+    [SerializeField] private Vector3 snapPointLocalPosition;
+    [SerializeField] private float zOffset = -0.05f;
+    private bool hasSnapPoint = false;
+
+    public void SetSnapPoint(Vector3 localGridPosition)
+    {
+        snapPointLocalPosition = new Vector3(localGridPosition.x, localGridPosition.y, zOffset);
+        hasSnapPoint = true;
+        transform.localPosition = snapPointLocalPosition;
+    }
     public void OnGrabStart() 
     {
         isBeingHeld = true;
@@ -39,8 +50,13 @@ public class RotatableRing : MonoBehaviour
         TargetSnapAngel = Mathf.Round(CurrentAngle / 90f) * 90f;
         CurrentAngle = TargetSnapAngel;
 
-        // 3. Pas de definitieve rotatie strak toe op het object
+        // 3. Pas de definitieve rotatie én het vaste snap point direct toe
         transform.localRotation = Quaternion.Euler(0f, 0f, CurrentAngle);
+
+        if (hasSnapPoint)
+        {
+            transform.localPosition = snapPointLocalPosition;
+        }
 
         // 4. Controleer of de hoek overeenkomt met de winnende hoek
         float normalizedAngle = (CurrentAngle % 360f + 360f) % 360f;
@@ -50,7 +66,7 @@ public class RotatableRing : MonoBehaviour
         // 5. Geef een seintje aan de CircuitManager
         OnRingRotated?.Invoke();
 
-        Debug.Log($"Ring gespind naar {CurrentAngle}° | Correct uitgelijnd: {IsCorrectAligned}");
+        Debug.Log($"Ring gespind naar {CurrentAngle}° op snap point {transform.localPosition} | Correct uitgelijnd: {IsCorrectAligned}");
     }
 
     public void SnapToNearest90() 

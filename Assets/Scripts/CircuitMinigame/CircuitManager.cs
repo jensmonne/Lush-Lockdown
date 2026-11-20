@@ -126,11 +126,12 @@ public class CircuitManager : MonoBehaviour
             else
             {
                 spawnedObj = Instantiate(ringPrefab, gridParent);
-                spawnedObj.name = $"Ring_3D_{i}"; // GOED
+                spawnedObj.name = $"Ring_3D_{i}";
 
                 RotatableRing newRing = spawnedObj.GetComponent<RotatableRing>();
                 if (newRing != null)
                 {
+                    newRing.SetSnapPoint(spawnPosition);
                     allRings.Add(newRing);
                 }
             }
