@@ -3983,6 +3983,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec71e001fc2f2a4e91ac60c7eae0bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CodeButtonManager
+  Buttons:
+  - {fileID: 2032589115}
+  - {fileID: 385872777}
+  - {fileID: 667485366}
+  - {fileID: 1846327087}
+  - {fileID: 2124807280}
+  - {fileID: 1028579142}
+  - {fileID: 593534301}
+  - {fileID: 801413010}
+  - {fileID: 1440185760}
+  - {fileID: 1265171138}
+  - {fileID: 478923662}
+  - {fileID: 1584914839}
   codeCrackerScript: {fileID: 551821834}
   currentInput: 
   onCodeCorrect:

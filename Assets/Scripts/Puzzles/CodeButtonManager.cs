@@ -1,6 +1,9 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class CodeButtonManager : MonoBehaviour
 {
@@ -9,7 +12,6 @@ public class CodeButtonManager : MonoBehaviour
     public string currentInput = "";
 
     [Header("Events")]
-
     public UnityEvent onCodeCorrect;
     public UnityEvent onCodeWrong;
 
@@ -23,16 +25,21 @@ public class CodeButtonManager : MonoBehaviour
 
     public void EnterInput()
     {
-        if (currentInput == codeCrackerScript.Code.ToString("D4")) 
         {
-            Debug.Log("Access Granted!");
-            onCodeCorrect.Invoke();
-        }
-        else
-        {
-            Debug.Log("Wrong Code! Resetting...");
-            onCodeWrong.Invoke();
-            ResetInput();
+            if (currentInput == codeCrackerScript.Code.ToString("D4"))
+            {
+                Debug.Log("Access Granted!");
+                onCodeCorrect.Invoke();
+                Button[] btns = gameObject.GetComponentsInChildren<Button>();
+                foreach (Button btn in btns)
+                    btn.enabled = false;
+            }
+            else
+            {
+                Debug.Log("Wrong Code! Resetting...");
+                onCodeWrong.Invoke();
+                ResetInput();
+            }
         }
     }
 
