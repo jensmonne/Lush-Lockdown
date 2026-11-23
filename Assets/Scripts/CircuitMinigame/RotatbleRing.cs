@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -76,14 +77,18 @@ public class RotatableRing : MonoBehaviour
 
     public void SnapAndCheck()
     {
-        // 1. Lees de huidige rotatie uit (neem de Z-as van de transform)
+        StopAllCoroutines();
+        StartCoroutine(SnapNextFrameRoutine());
+    }
+
+    private IEnumerator SnapNextFrameRoutine()
+    {
+        yield return null;
+
         CurrentAngle = transform.localEulerAngles.z;
-
-        // 2. Bereken de dichtstbijzijnde 90 graden stap
         TargetSnapAngel = Mathf.Round(CurrentAngle / 90f) * 90f;
-        CurrentAngle = TargetSnapAngel;
+        CurrentAngle = (TargetSnapAngel % 360f + 360f) % 360f;
 
-        // 3. Pas de definitieve rotatie én het vaste snap point direct toe
         transform.localRotation = Quaternion.Euler(0f, 0f, CurrentAngle);
 
         if (hasSnapPoint)
@@ -91,12 +96,9 @@ public class RotatableRing : MonoBehaviour
             transform.localPosition = snapPointLocalPosition;
         }
 
-        // 4. Controleer of de hoek overeenkomt met de winnende hoek
-        float normalizedAngle = (CurrentAngle % 360f + 360f) % 360f;
         float normalizedTarget = (targetCorrectAngle % 360f + 360f) % 360f;
-        IsCorrectAligned = Mathf.Approximately(normalizedAngle, normalizedTarget);
+        IsCorrectAligned = Mathf.Approximately(CurrentAngle, normalizedTarget);
 
-        // 5. Geef een seintje aan de CircuitManager
         OnRingRotated?.Invoke();
 
         Debug.Log($"Ring gespind naar {CurrentAngle}° op snap point {transform.localPosition} | Correct uitgelijnd: {IsCorrectAligned}");
