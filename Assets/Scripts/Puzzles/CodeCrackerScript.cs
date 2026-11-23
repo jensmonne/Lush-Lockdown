@@ -4,6 +4,7 @@ using UnityEngine;
 public class CodeCrackerScript : MonoBehaviour
 {
     [SerializeField] private GameObject codeCanvas;
+    [SerializeField] private VaultDoor vaultDoor;
     public int Code;
 
     private void Awake()
@@ -19,8 +20,9 @@ public class CodeCrackerScript : MonoBehaviour
 
     }
 
-    public void CodeCracked(bool CheckForCode)
+    public void CodeCracked()
     {
-
+        vaultDoor.OpenVault();
+        
     }
 }
