@@ -3983,36 +3983,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec71e001fc2f2a4e91ac60c7eae0bb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CodeButtonManager
-  Buttons:
-  - {fileID: 2032589115}
-  - {fileID: 385872777}
-  - {fileID: 667485366}
-  - {fileID: 1846327087}
-  - {fileID: 2124807280}
-  - {fileID: 1028579142}
-  - {fileID: 593534301}
-  - {fileID: 801413010}
-  - {fileID: 1440185760}
-  - {fileID: 1265171138}
-  - {fileID: 478923662}
-  - {fileID: 1584914839}
   codeCrackerScript: {fileID: 551821834}
   currentInput: 
-  onCodeCorrect:
+  OnCodeCorrect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 551821834}
-        m_TargetAssemblyTypeName: CodeCrackerScript, Assembly-CSharp
-        m_MethodName: CodeCracked
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 76806864}
         m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
         m_MethodName: CorrectSound
@@ -4025,12 +4000,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onCodeWrong:
+      - m_Target: {fileID: 551821834}
+        m_TargetAssemblyTypeName: CodeCrackerScript, Assembly-CSharp
+        m_MethodName: CodeCracked
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnCodeWrong:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1686089393}
-        m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
-        m_MethodName: ResetInput
+      - m_Target: {fileID: 76806864}
+        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
+        m_MethodName: WrongSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4040,9 +4027,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 76806864}
-        m_TargetAssemblyTypeName: MonitorAudio, Assembly-CSharp
-        m_MethodName: WrongSound
+      - m_Target: {fileID: 1686089393}
+        m_TargetAssemblyTypeName: CodeButtonManager, Assembly-CSharp
+        m_MethodName: ResetInput
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
