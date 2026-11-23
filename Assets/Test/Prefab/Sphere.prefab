@@ -131,9 +131,14 @@ MonoBehaviour:
   TargetSnapAngel: 0
   RingPorts: 00000000010000000200000003000000i
   isBeingHeld: 0
+  grabStartStepAngle: 90
+  dragRotationSpeed: 120
   targetCorrectAngle: 90
   snapPointLocalPosition: {x: 0, y: 0, z: 0}
   zOffset: -0.05
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  poweredColor: {r: 0.2, g: 1, b: 0.85, a: 1}
+  emissionIntensity: 2
 --- !u!54 &4232289802311828481
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -261,11 +266,11 @@ MonoBehaviour:
   m_VelocityScale: 1
   m_AngularVelocityDamping: 1
   m_AngularVelocityScale: 1
-  m_TrackPosition: 1
+  m_TrackPosition: 0
   m_SmoothPosition: 0
   m_SmoothPositionAmount: 8
   m_TightenPosition: 0.1
-  m_TrackRotation: 1
+  m_TrackRotation: 0
   m_SmoothRotation: 0
   m_SmoothRotationAmount: 8
   m_TightenRotation: 0.1
@@ -273,7 +278,7 @@ MonoBehaviour:
   m_SmoothScale: 0
   m_SmoothScaleAmount: 8
   m_TightenScale: 0.1
-  m_ThrowOnDetach: 1
+  m_ThrowOnDetach: 0
   m_ThrowSmoothingDuration: 0.25
   m_ThrowSmoothingCurve:
     serializedVersion: 2
