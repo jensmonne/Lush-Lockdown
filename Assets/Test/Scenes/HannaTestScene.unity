@@ -251,37 +251,6 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 1767192439, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
   m_PrefabInstance: {fileID: 778804057}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &571658006
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 571658008}
-  m_Layer: 0
-  m_Name: GameObject (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &571658008
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 571658006}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.245, y: 0.92, z: 0.278}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 668867996}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &668867995
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,14 +278,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1069666764}
-  - {fileID: 571658008}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.62, y: 1.45}
+  m_AnchoredPosition: {x: -1.62, y: 2.92}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &778804057
@@ -376,37 +343,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
---- !u!1 &1069666762
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1069666764}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1069666764
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069666762}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.36099994, y: 0.92, z: 0.278}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 668867996}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1642059953
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,22 +495,30 @@ MonoBehaviour:
   visualController: {fileID: 1656496369}
   shockHandler: {fileID: 1656496368}
   gridParent: {fileID: 668867996}
-  startPointPrefab: {fileID: 1069666762}
-  endPointPrefab: {fileID: 571658006}
+  startPointPrefab: {fileID: 0}
+  endPointPrefab: {fileID: 0}
   ringPrefab: {fileID: 4201323730272216450, guid: 8576e5892ae77644dac5583fc13407d1, type: 3}
-  columns: 6
-  rows: 6
+  columns: 7
+  rows: 5
   spacing: 0.5
+  tileScale: 0.8
+  useExampleLayout: 1
+  minPathLength: 6
+  minStartEndDistance: 3
+  minRequiredMoves: 3
+  weightCap: 1
+  weightStraight: 3
+  weightCorner: 3
+  weightT: 2
+  weightCross: 1
+  invertRotation: 0
   plantPrefab: {fileID: 0}
   plantCount: 2
   plantDamage: 25
-  startOutputDir: 1
-  endInputDir: 3
+  startPorts: 00000000010000000200000003000000i
+  endPorts: 00000000010000000200000003000000i
   gridSlotPrefab: {fileID: 4714258341732225190, guid: 4d41dfb5ee24ed84ead1d38075fd7107, type: 3}
   puzzleScreen: {fileID: 4774945378514913036}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  poweredColor: {r: 0.2, g: 1, b: 0.85, a: 1}
-  emissionIntensity: 2
 --- !u!4 &1656496371
 Transform:
   m_ObjectHideFlags: 0
