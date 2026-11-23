@@ -521,6 +521,8 @@ MonoBehaviour:
   rightController: {fileID: 0}
   shockIntensity: 0.8
   shockDuration: 0.5
+  playerHealth: 100
+  shockCooldown: 1
 --- !u!114 &1656496369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,11 +562,19 @@ MonoBehaviour:
   startPointPrefab: {fileID: 1069666762}
   endPointPrefab: {fileID: 571658006}
   ringPrefab: {fileID: 4201323730272216450, guid: 8576e5892ae77644dac5583fc13407d1, type: 3}
-  columns: 3
-  rows: 3
+  columns: 6
+  rows: 6
   spacing: 0.5
+  plantPrefab: {fileID: 0}
+  plantCount: 2
+  plantDamage: 25
+  startOutputDir: 1
+  endInputDir: 3
   gridSlotPrefab: {fileID: 4714258341732225190, guid: 4d41dfb5ee24ed84ead1d38075fd7107, type: 3}
   puzzleScreen: {fileID: 4774945378514913036}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  poweredColor: {r: 0.2, g: 1, b: 0.85, a: 1}
+  emissionIntensity: 2
 --- !u!4 &1656496371
 Transform:
   m_ObjectHideFlags: 0

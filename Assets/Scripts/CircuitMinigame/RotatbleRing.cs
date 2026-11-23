@@ -17,6 +17,39 @@ public class RotatableRing : MonoBehaviour
     [SerializeField] private Vector3 snapPointLocalPosition;
     [SerializeField] private float zOffset = -0.05f;
     private bool hasSnapPoint = false;
+    [Header("Power Highlight")]
+    [SerializeField] private Color normalColor = Color.white;
+    [SerializeField] private Color poweredColor = new Color(0.2f, 1f, 0.85f);
+    [SerializeField] private float emissionIntensity = 2f;
+
+    private Renderer[] cachedRenderers;
+    private MaterialPropertyBlock propBlock;
+    private bool isPowered;
+
+    private void Awake()
+    {
+        cachedRenderers = GetComponentsInChildren<Renderer>();
+        propBlock = new MaterialPropertyBlock();
+        SetPowered(false);
+    }
+
+    public void SetPowered(bool powered)
+    {
+        isPowered = powered;
+        if (cachedRenderers == null || cachedRenderers.Length == 0) return;
+
+        Color targetColor = powered ? poweredColor : normalColor;
+
+        foreach (Renderer rend in cachedRenderers)
+        {
+            if (rend == null) continue;
+            rend.GetPropertyBlock(propBlock);
+            propBlock.SetColor("_Color", targetColor);
+            propBlock.SetColor("_BaseColor", targetColor);
+            propBlock.SetColor("_EmissionColor", powered ? poweredColor * emissionIntensity : Color.black);
+            rend.SetPropertyBlock(propBlock);
+        }
+    }
 
     public void SetSnapPoint(Vector3 localGridPosition)
     {
