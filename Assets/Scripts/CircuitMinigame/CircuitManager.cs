@@ -9,7 +9,7 @@ public class CircuitManager : MonoBehaviour
 {
     [SerializeField] private string puzzleId;
     [SerializeField] private bool IsCompleted;
-    [SerializeField] private List<RotatableRing> allRings = new List<RotatableRing>();
+    [SerializeField] private List<TwistRing> allRings = new List<TwistRing>();
     [SerializeField] private int currentAttempts;
 
     [Header("Grid")]
@@ -23,8 +23,7 @@ public class CircuitManager : MonoBehaviour
     [Header("Planten Gevaar")]
     [SerializeField] private int plantDamage = 25;
 
-    [Header("UI Feedback")]
-    [SerializeField] private WorldScreen puzzleScreen;
+
 
     private CircuitGridData grid;
 
@@ -41,10 +40,7 @@ public class CircuitManager : MonoBehaviour
 
     public void Initializepuzzel()
     {
-        if (puzzleScreen != null)
-        {
-            puzzleScreen.KeepScreenActive();
-        }
+       
         IsCompleted = false;
         currentAttempts = 0;
     }
@@ -66,7 +62,7 @@ public class CircuitManager : MonoBehaviour
         if (grid == null) return;
 
         allRings.AddRange(grid.allRings);
-        foreach (RotatableRing ring in grid.allRings)
+        foreach (TwistRing ring in grid.allRings)
         {
             if (ring == null) continue;
             ring.OnRingRotated -= HandleRingRotated;
@@ -93,7 +89,7 @@ public class CircuitManager : MonoBehaviour
     {
         if (grid == null) return false;
 
-        HashSet<RotatableRing> poweredRings = new HashSet<RotatableRing>();
+        HashSet<TwistRing> poweredRings = new HashSet<TwistRing>();
         bool reachedEnd = grid.Trace(poweredRings, silent ? (System.Action)null : OnPlantTouched);
         grid.ApplyPower(poweredRings);
         return reachedEnd;

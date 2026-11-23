@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -11,7 +10,7 @@ public class CircuitGridData
     public int columns;
     public int rows;
 
-    public RotatableRing[,] rings;
+    public TwistRing[,] rings;
     public bool[,] plants;
 
     public Vector2Int startPos;
@@ -21,16 +20,16 @@ public class CircuitGridData
     public bool invertRotation;
 
     public List<Vector2Int> path = new List<Vector2Int>();
-    public readonly List<RotatableRing> allRings = new List<RotatableRing>();
-    public readonly Dictionary<RotatableRing, TileShape> shapes = new Dictionary<RotatableRing, TileShape>();
+    public readonly List<TwistRing> allRings = new List<TwistRing>();
+    public readonly Dictionary<TwistRing, TileShape> shapes = new Dictionary<TwistRing, TileShape>();
 
     public bool InBounds(Vector2Int p) => p.x >= 0 && p.x < columns && p.y >= 0 && p.y < rows;
 
-    public int GetStep(RotatableRing ring) => CircuitTileModel.GetStep(ring.transform, invertRotation);
+    public int GetStep(TwistRing ring) => CircuitTileModel.GetStep(ring.transform, invertRotation);
 
-    public void SetStep(RotatableRing ring, int step) => CircuitTileModel.SetStep(ring.transform, step, invertRotation);
+    public void SetStep(TwistRing ring, int step) => CircuitTileModel.SetStep(ring.transform, step, invertRotation);
 
-    public List<PortDirection> GetRingPorts(RotatableRing ring)
+    public List<PortDirection> GetRingPorts(TwistRing ring)
     {
         if (ring == null || !shapes.TryGetValue(ring, out TileShape shape)) return new List<PortDirection>();
         return CircuitTileModel.RotatedPorts(shape, GetStep(ring));
@@ -54,7 +53,7 @@ public class CircuitGridData
     /// poweredRings (optioneel) krijgt alle tegels die onder stroom staan.
     /// onPlantTouched (optioneel) wordt aangeroepen voor elke plant waar de stroom tegenaan loopt.
     /// </summary>
-    public bool Trace(HashSet<RotatableRing> poweredRings, System.Action onPlantTouched)
+    public bool Trace(HashSet<TwistRing> poweredRings, System.Action onPlantTouched)
     {
         if (rings == null || columns <= 0 || rows <= 0) return false;
 
@@ -92,7 +91,7 @@ public class CircuitGridData
                     continue;
                 }
 
-                RotatableRing nextRing = rings[next.x, next.y];
+                TwistRing nextRing = rings[next.x, next.y];
                 if (nextRing == null) continue;
 
                 if (!GetRingPorts(nextRing).Contains(requiredNeighborPort)) continue;
@@ -106,9 +105,9 @@ public class CircuitGridData
         return reachedEnd;
     }
 
-    public void ApplyPower(HashSet<RotatableRing> poweredRings)
+    public void ApplyPower(HashSet<TwistRing> poweredRings)
     {
-        foreach (RotatableRing ring in allRings)
+        foreach (TwistRing ring in allRings)
         {
             if (ring == null) continue;
             ring.SetPowered(poweredRings.Contains(ring));
@@ -123,7 +122,7 @@ public class CircuitGridData
 
         for (int i = fromIndex; i < allRings.Count; i++)
         {
-            RotatableRing ring = allRings[i];
+            TwistRing ring = allRings[i];
             if (ring == null) continue;
 
             int original = GetStep(ring);

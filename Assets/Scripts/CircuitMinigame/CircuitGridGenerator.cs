@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactables; // XRI 3.x. Bij XRI 2.x: deze regel weghalen.
 
 /// <summary>
 /// Bouwt het 3D-grid: kiest start en eind, maakt een oplosbare route, vult de rest op en
@@ -12,7 +12,7 @@ public class CircuitGridGenerator : MonoBehaviour
     [SerializeField] private Transform gridParent;
     [SerializeField] private GameObject startPointPrefab;
     [SerializeField] private GameObject endPointPrefab;
-    [Tooltip("De grijpbare tegel (bol/ring met RotatableRing). De vorm van de buis bepaalt dit script zelf.")]
+    [Tooltip("De grijpbare tegel (bol/ring met TwistRing). De vorm van de buis bepaalt dit script zelf.")]
     [SerializeField] private GameObject ringPrefab;
     [SerializeField] private GameObject gridSlotPrefab;
     [SerializeField] private int columns = 7;
@@ -78,13 +78,18 @@ public class CircuitGridGenerator : MonoBehaviour
             return null;
         }
 
+        if (tileScale > spacing * 0.9f)
+        {
+            Debug.LogWarning($"Tile Scale ({tileScale}) is bijna zo groot als Spacing ({spacing}): de tegels overlappen. Maak Spacing groter of Tile Scale kleiner.");
+        }
+
         ClearGrid();
 
         CircuitGridData data = new CircuitGridData
         {
             columns = columns,
             rows = rows,
-            rings = new RotatableRing[columns, rows],
+            rings = new TwistRing[columns, rows],
             plants = new bool[columns, rows],
             startPorts = new List<PortDirection>(startPorts),
             endPorts = new List<PortDirection>(endPorts),
@@ -99,11 +104,16 @@ public class CircuitGridGenerator : MonoBehaviour
 
         HashSet<Vector2Int> plantCells = ChoosePlantCells(pathIndex);
 
-        BuildCells(data, pathIndex, plantCells);
+        if (!BuildCells(data, pathIndex, plantCells))
+        {
+            // Niet half laten staan: dan blijft er een kale bol naast het startblok hangen
+            ClearGrid();
+            return null;
+        }
         ScrambleRoute(data);
 
         // Beginstand tonen (welke tegels staan nu onder stroom)
-        HashSet<RotatableRing> powered = new HashSet<RotatableRing>();
+        HashSet<TwistRing> powered = new HashSet<TwistRing>();
         data.Trace(powered, null);
         data.ApplyPower(powered);
 
@@ -179,7 +189,7 @@ public class CircuitGridGenerator : MonoBehaviour
         return plantCells;
     }
 
-    private void BuildCells(CircuitGridData data, Dictionary<Vector2Int, int> pathIndex, HashSet<Vector2Int> plantCells)
+    private bool BuildCells(CircuitGridData data, Dictionary<Vector2Int, int> pathIndex, HashSet<Vector2Int> plantCells)
     {
         List<Vector2Int> path = data.path;
 
@@ -222,8 +232,8 @@ public class CircuitGridGenerator : MonoBehaviour
                     PortDirection toNext = CircuitTileModel.DirectionBetween(cell, path[idx + 1]);
                     TileShape shape = CircuitTileModel.Opposite(toPrev) == toNext ? TileShape.Straight : TileShape.Corner;
 
-                    RotatableRing ring = SpawnRing(data, shape, objPos, $"Ring_3D_{x}_{y}");
-                    if (ring == null) return;
+                    TwistRing ring = SpawnRing(data, shape, objPos, $"Ring_3D_{x}_{y}");
+                    if (ring == null) return false;
 
                     int solvedStep = 0;
                     for (int s = 0; s < 4; s++)
@@ -236,13 +246,15 @@ public class CircuitGridGenerator : MonoBehaviour
                 }
                 else
                 {
-                    RotatableRing ring = SpawnRing(data, RandomFillShape(), objPos, $"Ring_3D_{x}_{y}");
-                    if (ring == null) return;
+                    TwistRing ring = SpawnRing(data, RandomFillShape(), objPos, $"Ring_3D_{x}_{y}");
+                    if (ring == null) return false;
                     data.SetStep(ring, Random.Range(0, 4));
                     data.rings[x, y] = ring;
                 }
             }
         }
+
+        return true;
     }
 
     // Route-tegels door elkaar draaien, maar niet te makkelijk: de puzzel mag niet binnen
@@ -255,7 +267,7 @@ public class CircuitGridGenerator : MonoBehaviour
         {
             for (int i = 1; i < data.path.Count - 1; i++)
             {
-                RotatableRing r = data.rings[data.path[i].x, data.path[i].y];
+                TwistRing r = data.rings[data.path[i].x, data.path[i].y];
                 if (r != null) data.SetStep(r, Random.Range(0, 4));
             }
             if (!data.SolvableWithin(maxEasyMoves)) break;
@@ -264,25 +276,49 @@ public class CircuitGridGenerator : MonoBehaviour
 
     // ---------- Spawnen ----------
 
-    private RotatableRing SpawnRing(CircuitGridData data, TileShape shape, Vector3 localPos, string objName)
+    private TwistRing SpawnRing(CircuitGridData data, TileShape shape, Vector3 localPos, string objName)
     {
         GameObject obj = Instantiate(ringPrefab, gridParent);
         obj.name = objName;
         obj.transform.localPosition = localPos;
         obj.transform.localScale = Vector3.one * tileScale;
 
-        RotatableRing ring = obj.GetComponent<RotatableRing>();
-        if (ring == null)
-        {
-            Debug.LogError("De Ring Prefab heeft geen RotatableRing component!");
-            return null;
-        }
+        TwistRing ring = PrepareRing(obj);
+        if (ring == null) return null;
 
         ring.SetSnapPoint(localPos);
         ring.SetPowered(false);
 
         data.shapes[ring] = shape;
         data.allRings.Add(ring);
+        return ring;
+    }
+
+    // Zorgt dat de ring de VR-draaibeweging heeft en dat oude grijp-componenten hem niet laten wegvliegen
+    private TwistRing PrepareRing(GameObject obj)
+    {
+        // Oude interactables (zoals XR Grab Interactable) verwijderen: die pakken de ring los van het grid
+        foreach (XRBaseInteractable old in obj.GetComponents<XRBaseInteractable>())
+        {
+            if (old is TwistRing) continue;
+            SafeDestroy(old);
+        }
+
+        TwistRing ring = obj.GetComponent<TwistRing>();
+        if (ring == null)
+        {
+            Debug.LogWarning($"De Ring Prefab '{ringPrefab.name}' had geen TwistRing: ik heb hem toegevoegd. Voeg TwistRing zelf toe aan de prefab om dit bericht te verwijderen.");
+            ring = obj.AddComponent<TwistRing>();
+        }
+
+        // Zwaartekracht/physics zou de ring uit het grid laten vallen
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.useGravity = false;
+            rb.isKinematic = true;
+        }
+
         return ring;
     }
 
@@ -426,9 +462,9 @@ public class CircuitGridGenerator : MonoBehaviour
         }
     }
 
-    private void SafeDestroy(GameObject go)
+    private void SafeDestroy(Object obj)
     {
-        if (Application.isPlaying) Destroy(go);
-        else DestroyImmediate(go);
+        if (Application.isPlaying) Destroy(obj);
+        else DestroyImmediate(obj);
     }
 }
