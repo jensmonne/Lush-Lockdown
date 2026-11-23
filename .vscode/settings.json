@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Escape-Room.slnx",
+    "dotnet.defaultSolution": "Lush-Lockdown.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }
