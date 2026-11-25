@@ -15,6 +15,7 @@ public class NarrationManager : MonoBehaviour
     [SerializeField] private int maxQueueSize = 5;
     private readonly List<VoiceCue> queue = new List<VoiceCue>();   // needs using System.Collections.Generic;
     [SerializeField] private GameEventBus bus;
+    [SerializeField] private SubtitleDisplay subtitles;   // new slot
     private void Awake()
     {
         tts = ttsBehaviour as TTSEngine;
