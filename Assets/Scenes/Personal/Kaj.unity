@@ -5701,7 +5701,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &2000650906
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5816,7 +5816,7 @@ Transform:
   m_GameObject: {fileID: 2000650905}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 7, z: 2}
+  m_LocalPosition: {x: -3, y: 7, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5836,6 +5836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthScript
   playerSounds: {fileID: 2000650913}
   volume: {fileID: 544699155}
+  flashDuration: 0.5
 --- !u!114 &2000650913
 MonoBehaviour:
   m_ObjectHideFlags: 0
