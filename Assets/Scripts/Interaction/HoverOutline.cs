@@ -23,7 +23,6 @@ public class HoverOutline : MonoBehaviour
 
     private void Update()
     {
-        // isHovered is true while at least one interactor is hovering, no matter how many enter or leave.
         bool show = interactable.isHovered && !(hideWhileSelected && interactable.isSelected);
         if (outline.enabled != show) outline.enabled = show;
     }

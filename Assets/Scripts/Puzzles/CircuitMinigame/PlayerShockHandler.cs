@@ -1,11 +1,13 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
 
 public class PlayerShockHandler : MonoBehaviour
 {
     [Header("UML Attributes - VR Controllers")]
-    [SerializeField] private ActionBasedController leftController;
-    [SerializeField] private ActionBasedController rightController;
+    [Tooltip("Haptic Impulse Player on XR Origin > Camera Offset > Left Controller")]
+    [SerializeField] private HapticImpulsePlayer leftController;
+    [Tooltip("Haptic Impulse Player on XR Origin > Camera Offset > Right Controller")]
+    [SerializeField] private HapticImpulsePlayer rightController;
 
     [Header("UML Attributes - Shock & Damage")]
     [SerializeField] private float shockIntensity = 0.8f;
@@ -15,9 +17,9 @@ public class PlayerShockHandler : MonoBehaviour
 
     private float lastShockTime = -999f;
 
-    private void TriggerHaptic(ActionBasedController controller)
+    private void TriggerHaptic(HapticImpulsePlayer controller)
     {
-        if (controller != null && controller.enableInputTracking)
+        if (controller != null)
         {
             controller.SendHapticImpulse(shockIntensity, shockDuration);
         }
