@@ -2,35 +2,35 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactables; // XRI 3.x. Bij XRI 2.x: deze regel weghalen.
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 /// <summary>
-/// Een ring die je draait door hem met een VR-controller vast te pakken (grip/trigger)
-/// en je pols te draaien. De ring blijft op zijn plek en volgt de draaiing van je hand.
-/// Laat je los, dan klikt hij naar de dichtstbijzijnde kwartslag en wordt OnRingRotated afgevuurd.
+/// A ring you rotate by grabbing it with a VR controller (grip/trigger)
+/// and twisting your wrist. The ring stays in place and follows your hand's rotation.
+/// When you release, it snaps to the nearest quarter-turn (90 degrees) and fires OnRingRotated.
 /// </summary>
 public class TwistRing : XRSimpleInteractable
 {
-    [Header("Draaien met je hand")]
-    [Tooltip("1 = de ring draait precies mee met je pols. Hoger = minder polsdraai nodig.")]
+    [Header("Hand Rotation")]
+    [Tooltip("1 = the ring rotates 1:1 with your wrist. Higher = less wrist rotation needed.")]
     [SerializeField] private float twistSensitivity = 1f;
-    [Tooltip("Zet aan als de ring de andere kant op draait dan je hand.")]
+    [Tooltip("Enable if the ring rotates in the opposite direction of your hand.")]
     [SerializeField] private bool invertTwist = false;
-    [Tooltip("Hoe snel de ring je hand volgt. Hoger = directer, lager = vloeiender. 0 = geen vertraging.")]
+    [Tooltip("How fast the ring follows your hand. Higher = more direct, lower = smoother. 0 = no smoothing.")]
     [SerializeField] private float followSpeed = 30f;
-    [Tooltip("Hoe lang het vastklikken op een kwartslag duurt (seconden).")]
+    [Tooltip("How long snapping to a quarter-turn takes (seconds).")]
     [SerializeField] private float snapDuration = 0.1f;
 
-    [Header("Kleur (stroom aan/uit)")]
+    [Header("Colour (Power On/Off)")]
     [SerializeField] private Renderer[] tintRenderers;
     [SerializeField] private Color idleColor = new Color(0.2f, 0.85f, 0.8f);
     [SerializeField] private Color poweredColor = new Color(1f, 0.9f, 0.2f);
 
     [Header("Debug")]
-    [Tooltip("Schrijft in de Console wanneer je de ring pakt, draait en loslaat.")]
+    [Tooltip("Logs to the Console when you grab, rotate, and release the ring.")]
     [SerializeField] private bool logDebug = false;
 
-    /// <summary>Wordt afgevuurd nadat de ring losgelaten is en op een andere kwartslag staat.</summary>
+    /// <summary>Fired/invoked after the ring is released and is on a different quarter-turn (90-degree step)..</summary>
     public event Action OnRingRotated;
 
     private Transform handAttach;
@@ -55,7 +55,7 @@ public class TwistRing : XRSimpleInteractable
         SetPowered(false);
     }
 
-    // ---------- API voor de generator / manager ----------
+    // ---------- API for generator/ manager ----------
 
     public void SetSnapPoint(Vector3 localPosition)
     {
@@ -78,7 +78,7 @@ public class TwistRing : XRSimpleInteractable
         }
     }
 
-    // ---------- Vastpakken en draaien ----------
+    // ---------- grabbing and turning  ----------
 
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
@@ -100,7 +100,7 @@ public class TwistRing : XRSimpleInteractable
         currentAngle = startRingAngle;
         isTwisting = true;
 
-        if (logDebug) Debug.Log($"[TwistRing] {name} gepakt (start {startRingAngle:0}°)", this);
+        if (logDebug) Debug.Log($"[TwistRing] {name} grabbed (start {startRingAngle:0}°)", this);
     }
 
     protected override void OnSelectExited(SelectExitEventArgs args)
@@ -114,9 +114,9 @@ public class TwistRing : XRSimpleInteractable
         float snapped = Mathf.Round(currentAngle / 90f) * 90f;
         bool changed = Mathf.Abs(Mathf.DeltaAngle(snapped, startRingAngle)) > 1f;
 
-        if (logDebug) Debug.Log($"[TwistRing] {name} losgelaten op {currentAngle:0}° -> {snapped:0}° (veranderd: {changed})", this);
+        if (logDebug) Debug.Log($"[TwistRing] {name} released at {currentAngle:0}° -> {snapped:0}° (changed: {changed})", this);
 
-        // Wordt het object net uitgezet of vernietigd (bijv. bij opnieuw genereren), dan niet meer animeren
+        //If the object is just being disabled or destroyed (e.g., during regeneration), do not animate it anymore.
         if (!isActiveAndEnabled)
         {
             transform.localRotation = Quaternion.Euler(0f, 0f, snapped);
@@ -131,11 +131,11 @@ public class TwistRing : XRSimpleInteractable
     {
         if (!isTwisting || handAttach == null) return;
 
-        // Hoeveel is je hand gedraaid om de as die loodrecht op het grid staat?
+        // How much your hand has rotated around the axis perpendicular to the grid.
         Quaternion handDelta = handAttach.rotation * Quaternion.Inverse(startHandRotation);
         float raw = TwistAngleAbout(handDelta, PlaneNormal());
 
-        // Optellen in kleine stapjes, zodat je ook verder dan 180 graden kunt draaien
+        // Accumulate in small increments/steps so you can also rotate past 180 degrees.
         accumulatedTwist += Mathf.DeltaAngle(lastRawTwist, raw);
         lastRawTwist = raw;
 
@@ -154,7 +154,7 @@ public class TwistRing : XRSimpleInteractable
         return (transform.parent != null ? transform.parent.forward : Vector3.forward).normalized;
     }
 
-    // Het deel van een draaiing dat om 'axis' gaat (swing-twist), in graden (-180..180)
+    // The component of a rotation around axis (swing-twist), in degrees (-180..180).
     private static float TwistAngleAbout(Quaternion q, Vector3 axis)
     {
         if (q.w < 0f) q = new Quaternion(-q.x, -q.y, -q.z, -q.w);

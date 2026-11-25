@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// De puzzel-regie: start het genereren, controleert na elke draai of de puzzel klaar is
-/// en regelt succes, schade en feedback. Het grid zelf wordt gebouwd door CircuitGridGenerator.
+/// Orchestrates the puzzle: starts generation, checks after each rotation whether the puzzle is solved,
+/// and handles success, damage, and feedback. The grid itself is built by CircuitGridGenerator.
 /// </summary>
 public class CircuitManager : MonoBehaviour
 {
@@ -13,14 +13,13 @@ public class CircuitManager : MonoBehaviour
     [SerializeField] private int currentAttempts;
 
     [Header("Grid")]
-    [Tooltip("Het script dat het grid bouwt. Wordt automatisch gezocht op dit object als het leeg is.")]
+    [Tooltip("The script that builds the grid. Automatically found on this object if left empty.")]
     [SerializeField] private CircuitGridGenerator gridGenerator;
 
     [Header("Visuals & Feedback")]
     [SerializeField] private CircuitVisualController visualController;
     [SerializeField] private PlayerShockHandler shockHandler;
-
-    [Header("Planten Gevaar")]
+    [Header("Plant Hazard")]
     [SerializeField] private int plantDamage = 25;
 
 
@@ -51,7 +50,7 @@ public class CircuitManager : MonoBehaviour
         if (gridGenerator == null) gridGenerator = GetComponent<CircuitGridGenerator>();
         if (gridGenerator == null)
         {
-            Debug.LogError("FOUT: Geen CircuitGridGenerator gekoppeld. Voeg het component toe aan dit object of sleep het in 'Grid Generator'.");
+            Debug.LogError("ERROR: No CircuitGridGenerator assigned. Add the component to this object or drag it into 'Grid Generator'.");
             return;
         }
 
@@ -84,7 +83,7 @@ public class CircuitManager : MonoBehaviour
         }
     }
 
-    // silent = true: geen schade/shock (gebruikt bij het genereren van het grid)
+    //silent = true: no damage/shock (used when generating the grid).
     public bool CheckCircuit(bool silent = false)
     {
         if (grid == null) return false;
@@ -106,7 +105,6 @@ public class CircuitManager : MonoBehaviour
     public void triggerSuccessState()
     {
         IsCompleted = true;
-        Debug.Log("Puzzel afgerond");
         if (visualController != null)
         {
             visualController.SetPowerActive(true);

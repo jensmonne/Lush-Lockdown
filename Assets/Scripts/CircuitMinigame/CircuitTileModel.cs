@@ -4,8 +4,8 @@ using UnityEngine;
 public enum TileShape { Cap, Straight, Corner, T, Cross }
 
 /// <summary>
-/// Alles over de vorm en draaiing van een tegel en over richtingen op het grid.
-/// Geen scene-afhankelijkheden, wordt gedeeld door de generator en de manager.
+/// Everything about tile shape and rotation, and directions on the grid.
+/// No scene dependencies; shared by the generator and the manager.
 /// </summary>
 public static class CircuitTileModel
 {
@@ -14,7 +14,7 @@ public static class CircuitTileModel
         PortDirection.Noord, PortDirection.Oost, PortDirection.Zuid, PortDirection.West
     };
 
-    // Volgorde tegen de klok in (zoals een positieve Z-rotatie in Unity)
+    // Counter-clockwise order (matching a positive Z rotation in Unity)
     private static readonly PortDirection[] CcwOrder =
     {
         PortDirection.Noord, PortDirection.West, PortDirection.Zuid, PortDirection.Oost
@@ -46,7 +46,7 @@ public static class CircuitTileModel
         return ports;
     }
 
-    // Leest de draaistand (0..3) uit de Z-rotatie van de transform
+    // Reads the rotation step (0..3) from the transform's Z rotation
     public static int GetStep(Transform t, bool invert)
     {
         float z = t.localEulerAngles.z;

@@ -19,12 +19,11 @@ public class RotatableRing : MonoBehaviour
     public event Action OnRingRotated;
 
     [Header("VR Grab Rotatie")]
-    [SerializeField] private float grabStartStepAngle = 90f; // Draait direct bij het pakken (zet op 0 als je alleen wilt meedraaien)
+    [SerializeField] private float grabStartStepAngle = 90f; 
     [SerializeField] private float dragRotationSpeed = 120f;
 
     [Header("Winnende Instelling")]
-    [SerializeField] private float targetCorrectAngle = 90f; // De hoek waarop de ring goed staat
-
+    [SerializeField] private float targetCorrectAngle = 90f; 
     [Header("Grid Snap Point")]
     [SerializeField] private Vector3 snapPointLocalPosition;
     [SerializeField] private float zOffset = -0.05f;
@@ -132,7 +131,7 @@ public class RotatableRing : MonoBehaviour
     public void OnGrabStart()
     {
         isBeingHeld = true;
-        Debug.Log("Ring wordt vastgepakt en begint met draaien.");
+        Debug.Log("Ring is grabbed and starts rotating.");
 
         if (Mathf.Abs(grabStartStepAngle) > 0.01f)
         {
@@ -143,7 +142,7 @@ public class RotatableRing : MonoBehaviour
     public void OnGrabEnd()
     {
         isBeingHeld = false;
-        Debug.Log("Ring losgelaten, nu snappen naar dichtstbijzijnde 90 graden.");
+        Debug.Log("Ring released; now snapping to the nearest 90 degrees.");
 
         SnapAndCheck();
     }
@@ -185,7 +184,7 @@ public class RotatableRing : MonoBehaviour
 
         OnRingRotated?.Invoke();
 
-        Debug.Log($"Ring gespind naar {CurrentAngle}° op snap point {transform.localPosition} | Correct uitgelijnd: {IsCorrectAligned}");
+        Debug.Log($"Ring spun to {CurrentAngle}° at snap point {transform.localPosition} | Correctly aligned: {IsCorrectAligned}");
     }
     public void SnapToNearest90()
     {
@@ -198,15 +197,15 @@ public class RotatableRing : MonoBehaviour
     }
     public List<PortDirection> GetPortDirections()
     {
-        // We maken een nieuwe lijst aan voor de gedraaide poorten
+        // We create a new list for the rotated gates.
         List<PortDirection> rotatedPorts = new List<PortDirection>();
 
-        // Bereken hoeveel stappen van 90 graden de ring is gedraaid (0, 1, 2 of 3)
+        // Calculate how many 90-degree steps the ring has rotated (0, 1, 2, or 3).
         int rotationSteps = Mathf.RoundToInt((CurrentAngle % 360f + 360f) % 360f / 90f);
 
         foreach (PortDirection originalPort in RingPorts)
         {
-            // Tel de rotatiestappen op bij de oorspronkelijke poort en zorg dat hij binnen 0-3 blijft (Noord, Oost, Zuid, West)
+            // Add the rotation steps to the original port and wrap it to stay within 0–3 (North, East, South, West).
             int newPortIndex = ((int)originalPort + rotationSteps) % 4;
             rotatedPorts.Add((PortDirection)newPortIndex);
         }

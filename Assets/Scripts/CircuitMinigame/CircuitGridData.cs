@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// De uitkomst van het genereren: welke tegel waar staat, hoe hij gedraaid is en
-/// hoe de stroom loopt. De generator vult dit, de manager gebruikt het om te controleren.
+/// The result of generation: which tile is where, how it is rotated, and
+/// how the power/flow runs. The generator populates this; the manager uses it to validate/check
 /// </summary>
 public class CircuitGridData
 {
@@ -49,9 +49,9 @@ public class CircuitGridData
     }
 
     /// <summary>
-    /// Volgt de stroom vanaf de start. Geeft true als het eindpunt bereikt wordt.
-    /// poweredRings (optioneel) krijgt alle tegels die onder stroom staan.
-    /// onPlantTouched (optioneel) wordt aangeroepen voor elke plant waar de stroom tegenaan loopt.
+    /// Traces the power/flow from the start. Returns true if the endpoint is reached.
+    /// poweredRings (optional) receives all tiles that are powered.
+    /// onPlantTouched (optional) is called for each plant the power/flow hits..
     /// </summary>
     public bool Trace(HashSet<TwistRing> poweredRings, System.Action onPlantTouched)
     {
@@ -114,7 +114,7 @@ public class CircuitGridData
         }
     }
 
-    /// <summary>Is de puzzel op te lossen door hoogstens 'moves' tegels 90 graden te draaien?</summary>
+    /// <summary>Can the puzzle be solved by rotating at most moves tiles by 90 degrees?</summary>
     public bool SolvableWithin(int moves, int fromIndex = 0)
     {
         if (Trace(null, null)) return true;

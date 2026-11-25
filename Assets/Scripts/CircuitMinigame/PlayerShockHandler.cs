@@ -3,11 +3,11 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class PlayerShockHandler : MonoBehaviour
 {
-    [Header("UML Attributen - VR Controllers")]
+    [Header("UML Attributes - VR Controllers")]
     [SerializeField] private ActionBasedController leftController;
     [SerializeField] private ActionBasedController rightController;
 
-    [Header("UML Attributen - Schok & Damage")]
+    [Header("UML Attributes - Shock & Damage")]
     [SerializeField] private float shockIntensity = 0.8f;
     [SerializeField] private float shockDuration = 0.5f;
     [SerializeField] private int playerHealth = 100;
@@ -25,7 +25,7 @@ public class PlayerShockHandler : MonoBehaviour
 
     public void ApplySchockFeedback()
     {
-        Debug.Log("PlayerShockHandler: BZZT! Elektrische schok wordt toegepast op VR-controllers.");
+      
 
         TriggerHaptic(leftController);
         TriggerHaptic(rightController);
@@ -37,13 +37,12 @@ public class PlayerShockHandler : MonoBehaviour
         lastShockTime = Time.time;
 
         playerHealth = Mathf.Max(0, playerHealth - damage);
-        Debug.Log($"PlayerShockHandler: -{damage} damage! Resterende health: {playerHealth}");
 
         ApplySchockFeedback();
 
         if (playerHealth <= 0)
         {
-            Debug.Log("PlayerShockHandler: Speler is verslagen door planten/schokken!");
+            Debug.Log("PlayerShockHandler: Player defeated by plants/shocks!"); ;
         }
     }
 }

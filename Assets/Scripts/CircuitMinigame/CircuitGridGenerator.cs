@@ -1,86 +1,84 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit.Interactables; // XRI 3.x. Bij XRI 2.x: deze regel weghalen.
+using UnityEngine.XR.Interaction.Toolkit.Interactables; // XRI 3.x. For XRI 2.x: remove this line.
 
 /// <summary>
-/// Bouwt het 3D-grid: kiest start en eind, maakt een oplosbare route, vult de rest op en
-/// draait alles door elkaar. Weet niets van schade, score of UI; dat doet de CircuitManager.
+/// Builds the 3D grid: picks start and end, creates a solvable route, fills the rest, and
+/// scrambles everything. Knows nothing about damage, score, or UI; CircuitManager handles that..
 /// </summary>
 public class CircuitGridGenerator : MonoBehaviour
 {
-    [Header("3D Grid Spawner Instellingen")]
+    [Header("3D Grid Spawner Settings")]
     [SerializeField] private Transform gridParent;
     [SerializeField] private GameObject startPointPrefab;
     [SerializeField] private GameObject endPointPrefab;
-    [Tooltip("De grijpbare tegel (bol/ring met TwistRing). De vorm van de buis bepaalt dit script zelf.")]
+    [Tooltip("The grabbable tile (sphere/ring with TwistRing). The pipe shape is determined automatically by this script.")]
     [SerializeField] private GameObject ringPrefab;
     [SerializeField] private GameObject gridSlotPrefab;
     [SerializeField] private int columns = 7;
     [SerializeField] private int rows = 5;
     [SerializeField] private float spacing = 1.5f;
-    [Tooltip("Schaal van de tegels. Houd dit kleiner dan 'spacing', anders overlappen ze.")]
+    [Tooltip("Scale of the tiles. Keep this smaller than 'spacing', otherwise they will overlap.")]
     [SerializeField] private float tileScale = 0.8f;
 
     [Header("Layout")]
-    [Tooltip("Start linksboven (0,0), eind in de linkerkolom (rij = rows-2).")]
+    [Tooltip("Start leftcorner (0,0), end in the leftcollum (collum = rows-2).")]
     [SerializeField] private bool useExampleLayout = true;
-    [Tooltip("Minimale lengte van de oplossingsroute (in cellen, incl. start en eind).")]
+    [Tooltip("Minimum length of the solution path (in cells, incl. start and end).")]
     [SerializeField] private int minPathLength = 6;
-    [Tooltip("Minimale afstand (in vakjes) tussen start en eind. Nooit naast elkaar bij >= 2.")]
+    [Tooltip("Minimum distance (in tiles) between start and end. Never adjacent when >= 2.")]
     [SerializeField] private int minStartEndDistance = 3;
-    [Tooltip("Minimaal aantal keer draaien dat nodig is om de puzzel op te lossen (1-3).")]
+    [Tooltip("Minimum number of rotations required to solve the puzzle (1-3).")]
     [SerializeField] private int minRequiredMoves = 3;
 
-    [Header("Tegel-vormen (kans voor de opvulling)")]
+    [Header("Tile Shapes (Fill Weights)")]
     [SerializeField] private int weightCap = 1;
     [SerializeField] private int weightStraight = 3;
     [SerializeField] private int weightCorner = 3;
     [SerializeField] private int weightT = 2;
     [SerializeField] private int weightCross = 1;
-    [Tooltip("Zet aan als de draairichting omgekeerd aanvoelt.")]
+    [Tooltip("Enable if the rotation direction feels reversed.")]
     [SerializeField] private bool invertRotation = false;
 
-    [Header("Planten")]
+    [Header("Plants")]
     [SerializeField] private GameObject plantPrefab;
     [SerializeField] private int plantCount = 2;
 
-    [Header("Start & Eind Poorten (Meerdere Aansluitpunten)")]
+    [Header("Start & End Ports (Multiple Connection Points)")]
     [SerializeField]
     private List<PortDirection> startPorts = new List<PortDirection>
     {
         PortDirection.Noord, PortDirection.Oost, PortDirection.Zuid, PortDirection.West
     };
-
     [SerializeField]
     private List<PortDirection> endPorts = new List<PortDirection>
     {
         PortDirection.Noord, PortDirection.Oost, PortDirection.Zuid, PortDirection.West
     };
-
-    /// <summary>Bouwt een nieuw grid en geeft de data terug. Geeft null als er iets ontbreekt.</summary>
+    /// <summary>Builds a new grid and returns the data. Returns null if something is missing..</summary>
     public CircuitGridData Generate()
     {
         if (gridParent == null)
         {
-            Debug.LogError("FOUT: Grid Parent is niet gekoppeld in de Inspector van de CircuitGridGenerator!");
+            Debug.LogError("ERROR: Grid Parent is not assigned in the Inspector of CircuitGridGenerator!");
             return null;
         }
 
         if (ringPrefab == null)
         {
-            Debug.LogError("FOUT: Ring Prefab is niet gekoppeld in de Inspector van de CircuitGridGenerator!");
+            Debug.LogError("ERROR: Ring Prefab is not assigned in the Inspector of CircuitGridGenerator!");
             return null;
         }
 
         if (columns * rows < 3)
         {
-            Debug.LogError("Grid is te klein! Zorg voor minimaal 3 vakjes.");
+            Debug.LogError("Grid is too small! Make sure there are at least 3 tiles.");
             return null;
         }
 
         if (tileScale > spacing * 0.9f)
         {
-            Debug.LogWarning($"Tile Scale ({tileScale}) is bijna zo groot als Spacing ({spacing}): de tegels overlappen. Maak Spacing groter of Tile Scale kleiner.");
+            Debug.LogWarning($"Tile Scale ({tileScale}) is nearly as large as Spacing ({spacing}): tiles will overlap. Increase Spacing or decrease Tile Scale.");
         }
 
         ClearGrid();
@@ -106,13 +104,13 @@ public class CircuitGridGenerator : MonoBehaviour
 
         if (!BuildCells(data, pathIndex, plantCells))
         {
-            // Niet half laten staan: dan blijft er een kale bol naast het startblok hangen
+            //Don't leave it half-built/unfinished: otherwise a bare sphere is left hanging next to the start block.
             ClearGrid();
             return null;
         }
         ScrambleRoute(data);
 
-        // Beginstand tonen (welke tegels staan nu onder stroom)
+        //Show initial state (which tiles are currently powered).
         HashSet<TwistRing> powered = new HashSet<TwistRing>();
         data.Trace(powered, null);
         data.ApplyPower(powered);
@@ -120,7 +118,7 @@ public class CircuitGridGenerator : MonoBehaviour
         return data;
     }
 
-    // ---------- Stappen van het genereren ----------
+    // ---------- Generation steps (the sequence in which the generator builds the 3D grid)----------
 
     private void ClearGrid()
     {
@@ -227,7 +225,7 @@ public class CircuitGridGenerator : MonoBehaviour
                 }
                 else if (pathIndex.TryGetValue(cell, out int idx))
                 {
-                    // Tegel op de oplossingsroute: recht of bocht, passend gedraaid
+                    // Tile on the solution path: straight or corner/bend, rotated to fit.
                     PortDirection toPrev = CircuitTileModel.DirectionBetween(cell, path[idx - 1]);
                     PortDirection toNext = CircuitTileModel.DirectionBetween(cell, path[idx + 1]);
                     TileShape shape = CircuitTileModel.Opposite(toPrev) == toNext ? TileShape.Straight : TileShape.Corner;
@@ -257,8 +255,7 @@ public class CircuitGridGenerator : MonoBehaviour
         return true;
     }
 
-    // Route-tegels door elkaar draaien, maar niet te makkelijk: de puzzel mag niet binnen
-    // (minRequiredMoves - 1) draaien al op te lossen zijn.
+    // Scramble path tiles, but not too easily: the puzzle must not already be solvable within (minRequiredMoves - 1) rotations.
     private void ScrambleRoute(CircuitGridData data)
     {
         int maxEasyMoves = Mathf.Clamp(minRequiredMoves, 1, 3) - 1;
@@ -294,10 +291,10 @@ public class CircuitGridGenerator : MonoBehaviour
         return ring;
     }
 
-    // Zorgt dat de ring de VR-draaibeweging heeft en dat oude grijp-componenten hem niet laten wegvliegen
+    // Ensures the ring has the VR rotation movement and that legacy grab components do not cause it to fly away.
     private TwistRing PrepareRing(GameObject obj)
     {
-        // Oude interactables (zoals XR Grab Interactable) verwijderen: die pakken de ring los van het grid
+        //Remove old/legacy interactables (such as XR Grab Interactable): they detach the ring from the grid.
         foreach (XRBaseInteractable old in obj.GetComponents<XRBaseInteractable>())
         {
             if (old is TwistRing) continue;
@@ -311,7 +308,7 @@ public class CircuitGridGenerator : MonoBehaviour
             ring = obj.AddComponent<TwistRing>();
         }
 
-        // Zwaartekracht/physics zou de ring uit het grid laten vallen
+        // Gravity/physics would make the ring fall out of the grid.
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -367,7 +364,7 @@ public class CircuitGridGenerator : MonoBehaviour
         return TileShape.Cross;
     }
 
-    // ---------- Route zoeken ----------
+    // ---------- path finding ----------
 
     private int ManhattanDistance(Vector2Int a, Vector2Int b)
     {
@@ -449,7 +446,7 @@ public class CircuitGridGenerator : MonoBehaviour
         return result;
     }
 
-    // ---------- Kleine hulpjes ----------
+    // ---------- small help ----------
 
     private void Shuffle<T>(List<T> list)
     {
