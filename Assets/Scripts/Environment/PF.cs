@@ -6,7 +6,6 @@ using UnityEngine.Rendering.Universal;
 public class PF : MonoBehaviour
 {
     [SerializeField] HealthScript healthScript;
-    //[SerializeField] PlayerSounds playerSounds;
     [SerializeField] private Volume volume;
     [SerializeField] private float countdownDuration = 5f;
     [SerializeField] private float recoveryDuration = 5f;
@@ -15,9 +14,6 @@ public class PF : MonoBehaviour
     [Header("Vignette Settings")]
     [SerializeField] private float startIntensity = 0f;
     [SerializeField] private float maxIntensity = 0.75f;
-
-    [Header("Death Blackout (Color Adjustments)")]
-    [SerializeField] private float deathPostExposure = -15f;
 
     private Vignette _vignette;
     private ColorAdjustments _colorAdjustments;
