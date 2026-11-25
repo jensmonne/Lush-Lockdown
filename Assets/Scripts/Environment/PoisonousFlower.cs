@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class PF : MonoBehaviour
+public class PoisonousFlower : MonoBehaviour
 {
     [SerializeField] HealthScript healthScript;
     [SerializeField] private Volume volume;
