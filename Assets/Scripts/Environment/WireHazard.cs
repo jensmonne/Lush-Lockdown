@@ -20,6 +20,7 @@ public class WireHazard : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Touched: " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Player"))
         {
             HitWire();

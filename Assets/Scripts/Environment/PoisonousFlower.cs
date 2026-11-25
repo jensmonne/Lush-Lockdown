@@ -114,6 +114,7 @@ public class PoisonousFlower : MonoBehaviour
 
     private void UpdateVignetteFromRemainingTime()
     {
+
         if (_vignette == null || countdownDuration <= 0f) return;
 
         float dangerProgress = 1f - Mathf.Clamp01(_remainingTime / countdownDuration);
