@@ -1,52 +1,126 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PF : MonoBehaviour
 {
+    [SerializeField] HealthScript healthScript;
+    //[SerializeField] PlayerSounds playerSounds;
+    [SerializeField] private Volume volume;
     [SerializeField] private float countdownDuration = 5f;
+    [SerializeField] private float recoveryDuration = 5f;
     [SerializeField] private string playerTag = "Player";
 
-    private Coroutine deathCoroutine;
+    [Header("Vignette Settings")]
+    [SerializeField] private float startIntensity = 0f;
+    [SerializeField] private float maxIntensity = 0.75f;
+
+    [Header("Death Blackout (Color Adjustments)")]
+    [SerializeField] private float deathPostExposure = -15f;
+
+    private Vignette _vignette;
+    private ColorAdjustments _colorAdjustments;
+    private Coroutine _timerCoroutine;
+    private float _remainingTime;
+    private bool _isInside;
+    private bool _isDead;
+
+    private void Awake()
+    {
+        if (volume == null)
+        {
+            volume = GetComponent<Volume>();
+        }
+
+        _remainingTime = countdownDuration;
+
+        if (volume != null && volume.profile != null)
+        {
+            if (!volume.profile.TryGet(out _vignette))
+            {
+                Debug.LogWarning("Vignette override not found on the Volume profile.");
+            }
+            else
+            {
+                UpdateVignetteFromRemainingTime();
+            }
+
+            if (!volume.profile.TryGet(out _colorAdjustments))
+            {
+                Debug.LogWarning("Color Adjustments override not found on the Volume profile—add it to the Volume for full blackout.");
+            }
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag(playerTag)) return;
+        if (_isDead || !other.CompareTag(playerTag)) return;
 
-        if (deathCoroutine == null)
-        {
-            deathCoroutine = StartCoroutine(Flower());
-        }
+        _isInside = true;
+        RestartTimerLoop();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag(playerTag)) return;
+        if (_isDead || !other.CompareTag(playerTag)) return;
 
-        if (deathCoroutine != null)
-        {
-            StopCoroutine(deathCoroutine);
-            deathCoroutine = null;
-            Debug.Log("Countdown cancelled.");
-        }
+        _isInside = false;
+        Debug.Log("Left hitbox; recovering...");
+        RestartTimerLoop();
     }
 
-    private IEnumerator Flower()
+    private void RestartTimerLoop()
     {
-        float remainingTime = countdownDuration;
-
-        while (remainingTime > 0f)
+        if (_timerCoroutine != null)
         {
-            Debug.Log($"Dying in {remainingTime:F1}s...");
-            remainingTime -= Time.deltaTime;
+            StopCoroutine(_timerCoroutine);
+        }
+
+        _timerCoroutine = StartCoroutine(FlowerLoop());
+    }
+
+    private IEnumerator FlowerLoop()
+    {
+        while (!_isDead)
+        {
+            if (_isInside)
+            {
+                _remainingTime = Mathf.Max(0f, _remainingTime - Time.deltaTime);
+                UpdateVignetteFromRemainingTime();
+                Debug.Log($"Dying in {_remainingTime:F1}s...");
+
+                if (_remainingTime <= 0f)
+                {
+                    _timerCoroutine = null;
+                    healthScript.Death();
+                    yield break;
+                }
+            }
+            else
+            {
+                float safeRecovery = Mathf.Max(0.01f, recoveryDuration);
+                float recoveryRate = countdownDuration / safeRecovery;
+
+                _remainingTime = Mathf.Min(countdownDuration, _remainingTime + recoveryRate * Time.deltaTime);
+                UpdateVignetteFromRemainingTime();
+
+                if (_remainingTime >= countdownDuration)
+                {
+                    _timerCoroutine = null;
+                    yield break;
+                }
+            }
+
             yield return null;
         }
-
-        deathCoroutine = null;
-        Die();
     }
 
-    private void Die()
+    private void UpdateVignetteFromRemainingTime()
     {
-        Debug.Log("Player died!");
+        if (_vignette == null || countdownDuration <= 0f) return;
+
+        float dangerProgress = 1f - Mathf.Clamp01(_remainingTime / countdownDuration);
+        _vignette.intensity.value = Mathf.Lerp(startIntensity, maxIntensity, dangerProgress);
     }
 }
