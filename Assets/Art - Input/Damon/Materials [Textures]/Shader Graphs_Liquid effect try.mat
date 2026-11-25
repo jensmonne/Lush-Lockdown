@@ -62,6 +62,7 @@ Material:
     - _QueueOffset: 0
     - _RotX: 1
     - _RotZ: 0
+    - _WobbleX: 1
     - _Wobble_X: 1
     - _Wobble_Y: 0
     - _Wobble_Z: 1
