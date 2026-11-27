@@ -485,6 +485,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145743623}
   m_CullTransparentMesh: 1
+--- !u!1 &146941686 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8609089962046907670, guid: 0b7c0e481e7cdae698a7d6af79df3b4b, type: 3}
+  m_PrefabInstance: {fileID: 467995058}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &146941693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146941686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 362532c30537acd48b5f3bb5f7426040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthScript
+  playerSounds: {fileID: 146941694}
+  volume: {fileID: 544699155}
+  flashDuration: 0.5
+--- !u!114 &146941694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146941686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e818482f86f6b543843f63cdf5f2dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSounds
+  deathSFX: {fileID: 8300000, guid: ad59bb6041e24d449b65d89a86454520, type: 3}
+  hurtSFX: {fileID: 8300000, guid: 338ceef5fc6bffd46aaaea8840212504, type: 3}
+  chokingSFX: {fileID: 8300000, guid: 5c33deda15f4e41419493bfa5269ba9d, type: 3}
 --- !u!1 &174552216
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,7 +731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa40736645fb97a49bcd05f76143d01c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PF
-  healthScript: {fileID: 2000650911}
+  healthScript: {fileID: 146941693}
   volume: {fileID: 544699155}
   countdownDuration: 10
   recoveryDuration: 5
@@ -1299,6 +1334,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7444041312677711339, guid: 0b7c0e481e7cdae698a7d6af79df3b4b, type: 3}
+      propertyPath: m_AimAssistPercent
+      value: 0.824
+      objectReference: {fileID: 0}
     - target: {fileID: 8008433670553749231, guid: 0b7c0e481e7cdae698a7d6af79df3b4b, type: 3}
       propertyPath: m_RenderPostProcessing
       value: 1
@@ -1307,10 +1346,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR Origin (XR Rig)
       objectReference: {fileID: 0}
+    - target: {fileID: 8609089962046907670, guid: 0b7c0e481e7cdae698a7d6af79df3b4b, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8609089962046907670, guid: 0b7c0e481e7cdae698a7d6af79df3b4b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 146941694}
+    - targetCorrespondingSourceObject: {fileID: 8609089962046907670, guid: 0b7c0e481e7cdae698a7d6af79df3b4b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 146941693}
     - targetCorrespondingSourceObject: {fileID: 6443969730757945705, guid: 0b7c0e481e7cdae698a7d6af79df3b4b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 467995064}
@@ -5345,10 +5394,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7e8ebba539324544b666fec27460510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WireHazard
-  healthScript: {fileID: 2000650911}
+  healthScript: {fileID: 146941693}
   volume: {fileID: 544699155}
   flashDuration: 1
-  playerSounds: {fileID: 2000650913}
+  playerSounds: {fileID: 146941694}
   shockSFX: {fileID: 8300000, guid: 0363cc716327022419737d3aaf1721ae, type: 3}
 --- !u!1 &1828371677
 GameObject:
@@ -5894,15 +5943,13 @@ GameObject:
   - component: {fileID: 2000650908}
   - component: {fileID: 2000650907}
   - component: {fileID: 2000650906}
-  - component: {fileID: 2000650911}
-  - component: {fileID: 2000650913}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &2000650906
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6023,36 +6070,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2000650911
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2000650905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 362532c30537acd48b5f3bb5f7426040, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthScript
-  playerSounds: {fileID: 2000650913}
-  volume: {fileID: 544699155}
-  flashDuration: 0.5
---- !u!114 &2000650913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2000650905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e818482f86f6b543843f63cdf5f2dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSounds
-  deathSFX: {fileID: 8300000, guid: ad59bb6041e24d449b65d89a86454520, type: 3}
-  hurtSFX: {fileID: 8300000, guid: 338ceef5fc6bffd46aaaea8840212504, type: 3}
-  chokingSFX: {fileID: 8300000, guid: 5c33deda15f4e41419493bfa5269ba9d, type: 3}
 --- !u!1 &2032589113
 GameObject:
   m_ObjectHideFlags: 0

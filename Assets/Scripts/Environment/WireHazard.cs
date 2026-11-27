@@ -37,7 +37,7 @@ public class WireHazard : MonoBehaviour
         else
         {
             ShockSFX();
-            playerSounds.HurtSFX();
+        
             healthScript.Hurt();
         }
     } 
