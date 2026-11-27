@@ -62,6 +62,7 @@ public class HealthScript : MonoBehaviour
 
     public void Hurt()
     {
+        playerSounds.HurtSFX();
         StartRedFlash();
     }
 
