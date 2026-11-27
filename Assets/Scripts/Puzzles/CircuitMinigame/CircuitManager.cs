@@ -5,7 +5,7 @@ using UnityEngine;
 /// Orchestrates the puzzle: starts generation, checks after each rotation whether the puzzle is solved,
 /// and handles success, damage, and feedback. The grid itself is built by CircuitGridGenerator.
 /// </summary>
-public class CircuitManager : MonoBehaviour
+public class CircuitManager : MiniGame
 {
     [SerializeField] private string puzzleId;
     [SerializeField] private bool IsCompleted;
