@@ -6,7 +6,7 @@ public class WireHazard : MonoBehaviour
 {
     [SerializeField] private HealthScript healthScript;
     [SerializeField] private Volume volume;
-    [SerializeField] private float flashDuration = 0.5f;
+    //[SerializeField] private float flashDuration = 1f;
     [SerializeField] private PlayerSounds playerSounds;
     [SerializeField] private AudioClip shockSFX;
 
@@ -36,7 +36,6 @@ public class WireHazard : MonoBehaviour
         else
         {
             ShockSFX();
-        
             healthScript.Hurt();
         }
     } 
