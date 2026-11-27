@@ -9,7 +9,4 @@ public class VaultAudio : MonoBehaviour
     {
         audioSource.PlayOneShot(vaultSFX);
     }
-
 }
-
-

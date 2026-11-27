@@ -1,6 +1,3 @@
-using NUnit.Framework;
-using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -17,6 +14,7 @@ public class CodeButtonManager : MonoBehaviour
 
     public void PressNumber(string digit)
     {
+        if (!codeCrackerScript.AcceptsInput) return;
         if (currentInput.Length >= 4) return;
 
         currentInput += digit;
@@ -25,6 +23,8 @@ public class CodeButtonManager : MonoBehaviour
 
     public void EnterInput()
     {
+        if (!codeCrackerScript.AcceptsInput) return;
+
         {
             if (currentInput == codeCrackerScript.Code.ToString("D4"))
             {

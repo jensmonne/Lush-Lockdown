@@ -1,7 +1,6 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal; // Change to .HighDefinition if using HDRP
+using UnityEngine.Rendering.Universal;
 
 public class WireHazard : MonoBehaviour
 {

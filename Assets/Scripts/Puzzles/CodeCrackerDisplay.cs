@@ -1,7 +1,5 @@
 using UnityEngine;
 using TMPro;
-using System;
-using System.ComponentModel.Design.Serialization;
 
 public class CodeCrackerDisplay : MonoBehaviour
 {

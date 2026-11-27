@@ -22,19 +22,57 @@ public class CircuitManager : MiniGame
     [Header("Plant Hazard")]
     [SerializeField] private int plantDamage = 25;
 
-
+    [Header("Puzzle Sequence")]
+    [Tooltip("Optional. Links this minigame to the PuzzleSequenceManager. Found on this GameObject if left empty.")]
+    [SerializeField] private Puzzle puzzle;
 
     private CircuitGridData grid;
+
+    private bool AcceptsInput => !IsCompleted && (puzzle == null || (puzzle.IsUnlocked && !puzzle.IsSolved));
 
     private void Reset()
     {
         gridGenerator = GetComponent<CircuitGridGenerator>();
     }
 
+    private void Awake()
+    {
+        if (puzzle == null) puzzle = GetComponent<Puzzle>();
+        if (puzzle != null)
+        {
+            puzzle.onUnlocked.AddListener(UpdateRingsInteractable);
+            puzzle.Solved += OnPuzzleSolved;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (puzzle != null)
+        {
+            puzzle.onUnlocked.RemoveListener(UpdateRingsInteractable);
+            puzzle.Solved -= OnPuzzleSolved;
+        }
+    }
+
     private void Start()
     {
         Initializepuzzel();
         GenerateGrid();
+    }
+
+    private void UpdateRingsInteractable()
+    {
+        bool interactable = AcceptsInput;
+        foreach (TwistRing ring in allRings)
+        {
+            if (ring != null) ring.enabled = interactable;
+        }
+    }
+
+    private void OnPuzzleSolved(Puzzle solvedPuzzle)
+    {
+        if (!IsCompleted) triggerSuccessState();
+        UpdateRingsInteractable();
     }
 
     public void Initializepuzzel()
@@ -69,6 +107,7 @@ public class CircuitManager : MiniGame
         }
 
         CheckCircuit(true);
+        UpdateRingsInteractable();
     }
 
     private void HandleRingRotated()
@@ -83,7 +122,6 @@ public class CircuitManager : MiniGame
         }
     }
 
-    //silent = true: no damage/shock (used when generating the grid).
     public bool CheckCircuit(bool silent = false)
     {
         if (grid == null) return false;
@@ -110,6 +148,8 @@ public class CircuitManager : MiniGame
             visualController.SetPowerActive(true);
             visualController.PlaySparkeffect();
         }
+
+        if (puzzle != null) puzzle.Complete();
     }
 
     public void triggerPenalty()
